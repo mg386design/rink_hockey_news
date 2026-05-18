@@ -1,0 +1,21 @@
+name: Daily Rink Hockey Update
+
+on:
+  schedule:
+    - cron: '0 8 * * *'
+  workflow_dispatch:
+
+jobs:
+  check-news:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+      - name: Install Dependencies
+        run: |
+          gem install httparty nokogiri
+      - name: Run Gem Updater
+        run: ruby -Ilib -e "require 'rink_hockey_news'; RinkHockeyNews.daily_report"
